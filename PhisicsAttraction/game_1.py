@@ -59,7 +59,7 @@ class Vector2:
 			self.mult(m)
 
 
-class Ball:
+class Planet:
 	def __init__(self, pos, vel, r, move, mass):
 		self.positoin = Vector2(pos[0], pos[1])
 		self.velocity = Vector2(vel[0], vel[1])
@@ -67,7 +67,7 @@ class Ball:
 		self.move = move
 		self.mass = mass
 
-	def update(self, planets: None):
+	def update(self, list_planets: None):
 		self.velocity.limit(8)
 		self.positoin.Vadd(self.velocity)
 
@@ -76,11 +76,11 @@ class Ball:
 		if self.positoin.x > WIDTH + self.radius: self.positoin.x = -self.radius
 		if self.positoin.y > HEIGHT + self.radius: self.positoin.y = -self.radius
 
-		if self.move and planets != None:
+		if self.move and list_planets != None:
 			force_x = 0
 			force_y = 0
 			force = Vector2( force_x, force_y )
-			for planet in planets: 
+			for planet in list_planets: 
 				force_x = ( planet.mass*0.00001*(planet.positoin.x - self.positoin.x) )
 				force_y = ( planet.mass*0.00001*(planet.positoin.y - self.positoin.y) )
 				self.velocity.set( self.velocity.x + force_x, self.velocity.y + force_y )
@@ -105,10 +105,10 @@ alpha_sur.set_alpha(120)
 
 # -------------------------------------------------------------------------------
 
-all_objects = []
+all_planets = []
 
 for _ in range(3):
-	all_objects.append( Ball((randrange(WIDTH), randrange(HEIGHT)), (randint(-8, 8), randint(-8, 8)), randint(2, 8), True, randint(4, 16)) )
+	all_planets.append( Planet((randrange(WIDTH), randrange(HEIGHT)), (randint(-8, 8), randint(-8, 8)), randint(2, 8), True, randint(4, 16)) )
 
 # -------------------------------------------------------------------------------
 
@@ -121,9 +121,9 @@ while running:
 		if event.type == pygame.QUIT:
 			running = not running
 
-	for object_ in all_objects:
-		object_.update(all_objects)
-		object_.draw(screen)
+	for planet in all_planets:
+		planet.update(all_planets)
+		planet.draw(screen)
 
 	pygame.display.update()
 	clock.tick(FRAMERATE)
